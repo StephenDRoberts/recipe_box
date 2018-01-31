@@ -34,25 +34,18 @@ constructor(props, context) {
     this.setState({ value: e.target.value });
   }
 
+getInitialState(){
+	return{
+		titles: [
+				'Welsh Rarebit',
+				'Bara Brith',
+				'Scones',
+				'Welshcakes'
+		]
 
+	}
+}
 
-addModal(){
-	  
-    
-    const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
-
-    return (
-      <div>
-        <p>Click to get the full Modal experience!</p>
-
-        <Button bsStyle="primary" bsSize="large" onClick={this.handleShow}>
-          Launch demo modal
-        </Button>
-
-
-      </div>
-    );
-  }
 	
  
 
@@ -101,7 +94,7 @@ renderNormal(){
 		          
 		          <FormControl
 		            type="text"
-		            value={this.state.value}
+		            value={this.state.recipeTitle}
 		            placeholder="Enter recipe title"
 		            onChange={this.handleChange}
 		          />
