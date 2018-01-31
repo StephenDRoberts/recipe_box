@@ -1,14 +1,64 @@
 import React, { Component } from 'react';
-import {Navbar, Jumbotron, Button, PanelGroup, Panel} from 'react-bootstrap';
+import {Button, PanelGroup, Panel, Modal, Tooltip, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
 import logo from './logo.svg';
-import './App.css';
+
 
 
 
 class App extends React.Component{
 
-  render(){
-    return(
+constructor(props, context) {
+    super(props, context);
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
+	this.handleChange = this.handleChange.bind(this);
+
+
+    this.state = {
+      show: false,
+      value: ''
+    };
+  }
+
+  handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
+  handleChange(e) {
+    this.setState({ value: e.target.value });
+  }
+
+
+
+addModal(){
+	  
+    
+    const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
+
+    return (
+      <div>
+        <p>Click to get the full Modal experience!</p>
+
+        <Button bsStyle="primary" bsSize="large" onClick={this.handleShow}>
+          Launch demo modal
+        </Button>
+
+
+      </div>
+    );
+  }
+	
+ 
+
+  
+renderNormal(){
+	return(
       <div className = 'recipeContainer'>
 		<PanelGroup accordion id="accordion-uncontrolled-example" defaultActiveKey="2">
 		  <Panel eventKey="1">
@@ -34,15 +84,55 @@ class App extends React.Component{
 
 		</PanelGroup>
 
-		<button className = 'btn-primary'>Add</button>
-		<button className = 'btn-danger'>Delete</button>
+		<Button className = 'btn-primary' onClick={this.handleShow}>Add</Button>
+		<Button className = 'btn-danger'>Delete</Button>
 
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add recipe</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+		      <form>
+		        <FormGroup
+		          controlId="formBasicText"
+		         
+		        >
+		          <ControlLabel>Recipe Title</ControlLabel>
+		          
+		          <FormControl
+		            type="text"
+		            value={this.state.value}
+		            placeholder="Enter recipe title"
+		            onChange={this.handleChange}
+		          />
 
+		          <ControlLabel>Ingredients</ControlLabel>
+		          
+		          <FormControl
+		            type="text"
+		            value={this.state.value}
+		            placeholder="Enter ingredients"
+		            onChange={this.handleChange}
+		          />		          
+		         
+		        </FormGroup>
+		      </form>
+            
+            <p>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleClose}>Close</Button>
+          </Modal.Footer>
+        </Modal>
 
       </div> //end of render return div
-      
-
       )
+}
+
+  render(){
+    return this.renderNormal();
   }
 
 
