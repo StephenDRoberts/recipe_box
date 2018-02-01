@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Button, PanelGroup, Panel, Modal, Tooltip, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
-import logo from './logo.svg';
+
 
 class Recipe extends React.Component{
 	render(){
@@ -9,12 +9,11 @@ class Recipe extends React.Component{
 		<PanelGroup accordion id="accordion-uncontrolled-example" defaultActiveKey="2">
 		  <Panel eventKey="1">
 		    <Panel.Heading>
-		      <Panel.Title toggle>{this.props.children}</Panel.Title>
+		      <Panel.Title toggle>{this.props.title}</Panel.Title>
 		    </Panel.Heading>
 		    <Panel.Body collapsible>
 				<ul>
-					<li>{this.props.children}</li>
-
+					<li>{this.props.ingredients}</li>
 				</ul>
 		    </Panel.Body>
 		  </Panel>
@@ -79,8 +78,10 @@ constructor(props, context) {
     this.setState({ value: e.target.value });
   }
 
-eachRecipe(text,i){
-	return (<Recipe key={i}>{text}</Recipe>);
+eachRecipe(data,i){
+	
+	
+	return (<Recipe key={i} title={data.title} ingredients={data.ingredients}></Recipe>);
 
 				
 }
@@ -89,7 +90,8 @@ renderList(){
 	return(
 	<div>
 		<div className = 'recipeList'>
-			{this.state.titles.map(this.eachRecipe)}			
+			{this.state.recipes.map(this.eachRecipe)}
+
 		</div>
 			<Button className = 'btn-primary' onClick={this.handleShow}>Add</Button>
 			<Button className = 'btn-danger'>Delete</Button>
