@@ -116,18 +116,22 @@ handleChangeIngredients(e) {
 }
 
 eachRecipe(data,i){	
-
+console.log(data)
 return (<Recipe key={i} title={data.title} ingredients={data.ingredients}></Recipe>);
 
 }
 
 submit(){
-	var list = this.state.recipes;
-	var newTitle = this.state.valueTitle;
-	var newIngredients = this.state.valueIngredients;
-	list.push({title: newTitle, ingredients: newIngredients});
 
-	this.setState({recipes: list})
+
+
+/*	
+	var list = this.state.recipes;
+	var newTitle = this.refs.newTitle.value;
+	var newIngredients = this.refs.newIngredients.value;
+	console.log(newTitle +" + "+ newIngredients);
+	list.push({title: 'hello', ingredients: 'goodbye'})
+*/	this.setState({recipes: list})
 	this.handleClose()
 }
   
@@ -157,7 +161,7 @@ renderList(){
 			            //value={this.state.valueTitle}
 			            placeholder="Enter recipe title"
 			            ref = 'newTitle'
-			            onChange={this.handleChangeTitle}
+			          //  onChange={this.handleChangeTitle}
 			          />
 
 			          <ControlLabel>Ingredients</ControlLabel>
@@ -167,7 +171,7 @@ renderList(){
 			         //   value={this.state.valueIngredients}
 			            placeholder="Enter ingredients"
 			            ref = 'newIngredients'
-			            onChange={this.handleChangeIngredients}
+			          //  onChange={this.handleChangeIngredients}
 			          />		          
 			         
 			        </FormGroup>
@@ -182,6 +186,14 @@ renderList(){
 	            <Button className='btn-primary' onClick={this.submit.bind(this)}>Submit</Button>
 	          </Modal.Footer>
 	        </Modal>
+
+<form>
+  <label>
+    Name:
+    <input type="text" name="name" />
+  </label>
+  <input type="submit" value="Submit" />
+</form>
 
 
       </div> //end of render return div
