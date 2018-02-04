@@ -82,9 +82,11 @@ constructor(props, context) {
       recipes: JSON.parse(sessionStorage.getItem('recipes')) ||
       			[
 				{title: 'Welsh Rarebit',
-				ingredients: ['bread', 'cheese', 'flour']},
+				ingredients: ['bread', 'cheese', 'flour', 'worcestershire sauce', 'dry mustard']},
 				{title: 'Bara Brith',
-				ingredients: ['flour', 'eggs', 'sultanas', 'treacle', 'tea']}
+				ingredients: ['flour', 'eggs', 'brown sugar', 'tea', 'mixed fruit', 'cinnamon']},
+				{title: 'Scones',
+				ingredients: ['flour', 'eggs', 'caster sugar', 'milk', 'sultanas', 'baking powder']}
       ],
 
 
