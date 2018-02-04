@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import {Button, PanelGroup, Panel, Modal, Tooltip, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
+import React from 'react';
+import {Button, PanelGroup, Panel, Modal, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
 
 
 

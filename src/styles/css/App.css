@@ -1,9 +1,16 @@
 body {
-  margin: 0;
+  margin: 30px;
   padding: 0;
   font-family: sans-serif; }
 
 button {
   margin: 5px; }
+
+h2, p, a {
+  text-align: center; }
+
+.FCC {
+  text-align: center;
+  padding-bottom: 10px; }
 
 /*# sourceMappingURL=App.css.map */
