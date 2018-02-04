@@ -38,3 +38,14 @@
 	            <Button className='btn-primary' onClick={this.submit(this.state.valueTitle, this.state.valueIngredients)}>Submit</Button>
 	          </Modal.Footer>
 	        </Modal>
+
+
+
+
+	        //submit function:
+
+	        submit(title, ingredients){
+	var list = this.state.recipes;
+	list.push({title: title})
+	this.setState({recipes: list})
+}

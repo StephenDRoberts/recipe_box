@@ -1,48 +1,32 @@
 import React, { Component } from 'react';
 import {Button, PanelGroup, Panel, Modal, Tooltip, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
 
-class RecipeTitle extends React.Component{
-render(){
-	return(
-		    <Panel.Heading>
-		      <Panel.Title toggle>{this.props.title}</Panel.Title>
-		    </Panel.Heading>		
-		)
-	}
-}
-
-class Ingredients extends React.Component{
-
-	render(){
-/*		var ingredientList = this.props.ingredients;
-		
-		var listItems = ingredientList.map((ingredient, i)=>
-			<li key={i}>{ingredient}</li>
-		);
-*/			return(
-			    <Panel.Body collapsible>
-					<ul>
-						{this.props.ingredients}
-					</ul>
-					<Button className = 'btn-info'>Edit</Button>
-					<Button className = 'btn-danger'>Delete</Button>
-			    </Panel.Body>			
-				)
-		}
-	}
-
-
-
 
 
 class Recipe extends React.Component{
-	render(){
-		return(
+
+remove(){
+	this.props.deleteButton(this.props.index)
+}
+	
+renderNormal(){
+	return(
+
       <div className = 'recipe'>
 		<PanelGroup accordion id="accordion-uncontrolled-example" defaultActiveKey="2">
 		  <Panel eventKey="1">
-			<RecipeTitle title = {this.props.title}></RecipeTitle>
-			<Ingredients ingredients = {this.props.ingredients}></Ingredients>
+		
+		    <Panel.Heading>
+		      <Panel.Title toggle>{this.props.title}</Panel.Title>
+		    </Panel.Heading>		
+			
+			<Panel.Body collapsible>
+				<ul>
+					{this.props.ingredients}
+				</ul>
+				<Button className = 'btn-info' >Edit</Button>
+				<Button className = 'btn-danger' onClick={this.remove.bind(this)}>Delete</Button>
+		    </Panel.Body>			
 		  
 		  </Panel>
 
@@ -52,6 +36,12 @@ class Recipe extends React.Component{
 	</div>
 		)
 	}
+
+
+	render(){
+		return this.renderNormal();	
+	}		
+		
 }
 
 
@@ -66,7 +56,7 @@ constructor(props, context) {
 	this.handleChangeTitle = this.handleChangeTitle.bind(this);
 	this.handleChangeIngredients = this.handleChangeIngredients.bind(this);
 //	this.submit = this.submit.bind(this);
-	
+	this.removeRecipe = this.removeRecipe.bind(this);
 
     this.state = {
       show: false,
@@ -115,13 +105,21 @@ handleChangeIngredients(e) {
     this.setState({ valueIngredients: e.target.value });
 }
 
-eachRecipe(data,i){	
-
-return (<Recipe key={i} title={data.title} ingredients={data.ingredients}></Recipe>);
-
+removeRecipe(i){
+	
+	var list = this.state.recipes;
+	list.splice(i, 1)
+	this.setState({recipes: list})
 }
 
+/*eachRecipe(data,i){	
+
+r
+
+}*/
+
 submit(){
+	
 	var list = this.state.recipes;
 	var newTitle = this.state.valueTitle;
 	var newIngredients = this.state.valueIngredients;
@@ -135,8 +133,9 @@ renderList(){
 	return(
 	<div>
 		<div className = 'recipeList'>
-			{this.state.recipes.map(this.eachRecipe)}
-
+			{this.state.recipes.map(function(data, i){
+				return(<Recipe key={i} index={i} title={data.title} ingredients={data.ingredients.toString()} data={data} deleteButton={this.removeRecipe} ></Recipe>);
+			},this)}
 		</div>
 			<Button className = 'btn-primary' onClick={this.handleShow}>Add</Button>			
 
