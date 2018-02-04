@@ -6,7 +6,6 @@ import {Button, PanelGroup, Panel, Modal, FormGroup, ControlLabel, FormControl} 
 class Recipe extends React.Component{
 
 edit(){
-	
 	this.props.editButton(this.props.index)
 }
 
@@ -167,7 +166,8 @@ renderList(){
 	<div>
 		<div className = 'recipeList'>
 			{this.state.recipes.map(function(data, i){
-				return(<Recipe key={i} index={i} title={data.title} ingredients={data.ingredients} data={data} deleteButton={this.removeRecipe} editButton={this.handleEditShow}></Recipe>);
+				return(<Recipe key={i} index={i} title={data.title} ingredients={data.ingredients} data={data} 
+					deleteButton={this.removeRecipe} editButton={this.handleEditShow}></Recipe>);
 			},this)}
 		</div>
 			<Button className = 'btn-primary' onClick={this.handleShow}>Add</Button>			
@@ -197,7 +197,7 @@ renderList(){
 			          <FormControl
 			            type="text"
 			            value={this.state.valueIngredients}
-			            placeholder="Enter ingredients, seperate each with a comma"
+			            placeholder="Enter ingredients, separate each with a comma"
 			            ref = 'newIngredients'
 			            onChange={this.handleChangeIngredients}
 			          />		          
