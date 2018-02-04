@@ -5,6 +5,11 @@ import {Button, PanelGroup, Panel, Modal, Tooltip, FormGroup, ControlLabel, Form
 
 class Recipe extends React.Component{
 
+edit(){
+	
+	this.props.editButton(this.props.index)
+}
+
 remove(){
 	this.props.deleteButton(this.props.index)
 }
@@ -12,7 +17,7 @@ remove(){
 renderNormal(){
 	//below allows to run through array of ingredients and show each in own bullet
 	var listItems = this.props.ingredients.map(function(data,i){
-		return (<li>{data}</li>)
+		return (<li key={i}>{data}</li>)
 	})
 
 	return(
@@ -29,7 +34,7 @@ renderNormal(){
 				<ul>
 					{listItems}
 				</ul>
-				<Button className = 'btn-info' >Edit</Button>
+				<Button className = 'btn-info' onClick={this.edit.bind(this)}> Edit</Button>
 				<Button className = 'btn-danger' onClick={this.remove.bind(this)}>Delete</Button>
 		    </Panel.Body>			
 		  
@@ -56,6 +61,7 @@ constructor(props, context) {
     super(props, context);
 
     this.handleShow = this.handleShow.bind(this);
+    this.handleEditShow = this.handleEditShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
 	this.handleChangeTitle = this.handleChangeTitle.bind(this);
@@ -66,8 +72,10 @@ constructor(props, context) {
 
     this.state = {
       show: false,
+      editMode: false,
       valueTitle: '',
       valueIngredients: '',
+      editableIndex: '',
       //uses sessionStorage to remember update state
       //need to use JSON.parse as otherwise setItem turns recipes into 
       // an object of strings
@@ -90,10 +98,24 @@ constructor(props, context) {
 
 handleClose() {
     this.setState({ show: false });
+    this.setState({editMode: false});
 }
 
-handleShow() {
+handleEditShow(i){
+	
+	this.setState({editMode: true});
+	this.setState({ show: true });
+	this.setState({editableIndex: i})
+	
+    	this.setState({valueTitle: this.state.recipes[i].title})
+    	this.setState({valueIngredients: this.state.recipes[i].ingredients})
+    }
+
+
+handleShow(i) {
+    
     this.setState({ show: true });
+    
 }
 
 handleChangeTitle(e) {
@@ -104,8 +126,8 @@ handleChangeIngredients(e) {
     this.setState({ valueIngredients: e.target.value });
 }
 
-removeRecipe(i){
-	
+
+removeRecipe(i){	
 	var list = this.state.recipes;
 	list.splice(i, 1)
 	this.onSetResult('recipes', list)
@@ -120,25 +142,30 @@ onSetResult(data, newData){
 
 submit(){
 	
+	
 	var list = this.state.recipes;
 	var newTitle = this.state.valueTitle;
 	var newIngredients = this.state.valueIngredients.split(',');
-	list.push({title: newTitle, ingredients: newIngredients});
 	
+	if(this.state.editMode===false){
+		list.push({title: newTitle, ingredients: newIngredients});
+	} else {list.splice(this.state.editableIndex, 1, {title: newTitle, ingredients: newIngredients})}
 	this.onSetResult('recipes', list)
 	this.setState({recipes: list})
+	this.setState({valueTitle: ''})
+	this.setState({valueIngredients: ''})
 	
 	this.handleClose()
 }
   
 renderList(){
-	console.log(this.state.recipes)
+	
 
 	return(
 	<div>
 		<div className = 'recipeList'>
 			{this.state.recipes.map(function(data, i){
-				return(<Recipe key={i} index={i} title={data.title} ingredients={data.ingredients} data={data} deleteButton={this.removeRecipe} ></Recipe>);
+				return(<Recipe key={i} index={i} title={data.title} ingredients={data.ingredients} data={data} deleteButton={this.removeRecipe} editButton={this.handleEditShow}></Recipe>);
 			},this)}
 		</div>
 			<Button className = 'btn-primary' onClick={this.handleShow}>Add</Button>			
@@ -157,7 +184,7 @@ renderList(){
 			          
 			          <FormControl
 			            type="text"
-			            //value={this.state.valueTitle}
+			            value={this.state.valueTitle}
 			            placeholder="Enter recipe title"
 			            ref = 'newTitle'
 			            onChange={this.handleChangeTitle}
@@ -167,8 +194,8 @@ renderList(){
 			          
 			          <FormControl
 			            type="text"
-			         //   value={this.state.valueIngredients}
-			            placeholder="Enter ingredients"
+			            value={this.state.valueIngredients}
+			            placeholder="Enter ingredients, seperate each with a comma"
 			            ref = 'newIngredients'
 			            onChange={this.handleChangeIngredients}
 			          />		          
@@ -176,9 +203,7 @@ renderList(){
 			        </FormGroup>
 			      </form>
 	            
-	            <p>
-	              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-	            </p>
+	            
 	          </Modal.Body>
 	          <Modal.Footer>
 	            <Button onClick={this.handleClose}>Close</Button>
