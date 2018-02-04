@@ -10,6 +10,11 @@ remove(){
 }
 	
 renderNormal(){
+	//below allows to run through array of ingredients and show each in own bullet
+	var listItems = this.props.ingredients.map(function(data,i){
+		return (<li>{data}</li>)
+	})
+
 	return(
 
       <div className = 'recipe'>
@@ -22,7 +27,7 @@ renderNormal(){
 			
 			<Panel.Body collapsible>
 				<ul>
-					{this.props.ingredients}
+					{listItems}
 				</ul>
 				<Button className = 'btn-info' >Edit</Button>
 				<Button className = 'btn-danger' onClick={this.remove.bind(this)}>Delete</Button>
@@ -57,12 +62,17 @@ constructor(props, context) {
 	this.handleChangeIngredients = this.handleChangeIngredients.bind(this);
 //	this.submit = this.submit.bind(this);
 	this.removeRecipe = this.removeRecipe.bind(this);
+	
 
     this.state = {
       show: false,
       valueTitle: '',
       valueIngredients: '',
-      recipes: [
+      //uses sessionStorage to remember update state
+      //need to use JSON.parse as otherwise setItem turns recipes into 
+      // an object of strings
+      recipes: JSON.parse(sessionStorage.getItem('recipes')) ||
+      			[
 				{title: 'Welsh Rarebit',
 				ingredients: ['bread', 'cheese', 'flour']},
 				{title: 'Bara Brith',
@@ -70,20 +80,9 @@ constructor(props, context) {
       ],
 
 
-      titles: [
-				'Welsh Rarebit',
-				'Bara Brith',
-				'Scones',
-				'Welshcakes'
-      ],
-      ingredients: [
-					['Bread', 'cheese', 'butter'],
-					['flour', 'eggs', 'sultatnas', 'treacle', 'tea'],
-					['flour', 'eggs', 'sultanas'],
-					['flour', 'eggs', 'raisings']
+    }; //end of setting state
+	
 
-      ]
-    };
   }
 
 
@@ -109,32 +108,37 @@ removeRecipe(i){
 	
 	var list = this.state.recipes;
 	list.splice(i, 1)
+	this.onSetResult('recipes', list)
 	this.setState({recipes: list})
 }
 
-/*eachRecipe(data,i){	
 
-r
-
-}*/
+onSetResult(data, newData){
+	
+	sessionStorage.setItem(data, JSON.stringify(newData))
+}
 
 submit(){
 	
 	var list = this.state.recipes;
 	var newTitle = this.state.valueTitle;
-	var newIngredients = this.state.valueIngredients;
+	var newIngredients = this.state.valueIngredients.split(',');
 	list.push({title: newTitle, ingredients: newIngredients});
-
+	
+	this.onSetResult('recipes', list)
 	this.setState({recipes: list})
+	
 	this.handleClose()
 }
   
 renderList(){
+	console.log(this.state.recipes)
+
 	return(
 	<div>
 		<div className = 'recipeList'>
 			{this.state.recipes.map(function(data, i){
-				return(<Recipe key={i} index={i} title={data.title} ingredients={data.ingredients.toString()} data={data} deleteButton={this.removeRecipe} ></Recipe>);
+				return(<Recipe key={i} index={i} title={data.title} ingredients={data.ingredients} data={data} deleteButton={this.removeRecipe} ></Recipe>);
 			},this)}
 		</div>
 			<Button className = 'btn-primary' onClick={this.handleShow}>Add</Button>			
